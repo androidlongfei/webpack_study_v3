@@ -1,4 +1,4 @@
-# webpack使用
+# webpack使用(v3.3)
 
 相关文档
 
@@ -8,7 +8,11 @@
 
 ## 安装
 
-全局安装
+**1.安装nodejs**
+
+[下载nodejs并安装](https://nodejs.org/en/download/)
+
+**2.全局安装webpack**
 
 ```shell
 npm install -g webpack
@@ -19,14 +23,9 @@ npm install -g webpack
 初始化项目:
 
 ```shell
-mkdir webpack-study
-cd webpack-study
+mkdir webpack_study_v3
+cd webpack_study_v3
 npm init
-```
-
-本地安装webpack
-
-```shell
 npm install webpack --save
 ```
 
@@ -158,7 +157,7 @@ module.exports = {
 
 ```javascript
 module.exports = {
-    entry: [__dirname + '/src/script/a.js', __dirname + '/src/script/b.js'],
+    entry: [__dirname + '/src/js/a.js', __dirname + '/src/js/b.js'],
     output: {
         path: __dirname + '/dist/js',
         filename: 'bundle.js'
@@ -173,8 +172,8 @@ module.exports = {
 ```javascript
 module.exports = {
     entry: {
-        main: __dirname + '/src/script/a.js',
-        a: __dirname + '/src/script/b.js'
+        main: __dirname + '/src/js/a.js',
+        a: __dirname + '/src/js/b.js'
     },
     output: {
         path: __dirname + '/dist/js',
@@ -733,7 +732,7 @@ npm install url-loader file-loader --save-dev
 
 > `name: 'images/[name].[ext]'`:打包后的图片输出到images目录下,并保留原始文件名和扩展名
 
-### 12.uglifyjs-webpack-plugin(发布板中使用)
+### 12.uglifyjs-webpack-plugin(发布版中使用)
 
 目的
 
