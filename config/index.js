@@ -23,7 +23,8 @@ module.exports = {
         assetsSubDirectory: 'static', //静态资源目录
         assetsPublicPath: '/', //部署到网站时的根目录
         context: [ //代理路径
-
+            '/home',
+            '/about',
         ],
         proxypath: '', //代理服务器路径
         cssSourceMap: false
