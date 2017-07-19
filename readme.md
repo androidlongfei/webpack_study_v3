@@ -1,4 +1,99 @@
-# webpack配置文件
+# webpack使用
+
+相关文档
+
+- [v2.2-中文](http://www.css88.com/doc/webpack2/guides/get-started/)
+- [v3.3-英文](https://webpack.js.org/configuration/devtool/)
+- [npm](https://www.npmjs.com/package/webpack)
+
+## 安装
+
+全局安装
+
+```shell
+npm install -g webpack
+```
+
+## 创建测试工程
+
+初始化项目:
+
+```shell
+mkdir webpack-study
+cd webpack-study
+npm init
+```
+
+本地安装webpack
+
+```shell
+npm install webpack --save
+```
+
+## 命令行打包
+
+### 简单打包
+
+运行如下命令进行打包:
+
+```shell
+webpack hello.js hello.bundle.js
+```
+
+> `hello.js`:源文件
+
+> `hello.bundle.js`:目标文件
+
+生成以下信息:
+
+```
+Hash: 2aae56144f2493b9e53d
+Version: webpack 3.3.0
+Time: 64ms
+          Asset     Size  Chunks             Chunk Names
+hello.bundle.js  2.52 kB       0  [emitted]  main
+   [0] ./hello.js 44 bytes {0} [built]
+```
+
+>
+
+> Hash:哈希值
+
+> Version:webpack版本
+
+> Time:打包所花费的时间
+
+> Asset:打包所生成的目标文件
+
+> Size:文件的大小
+
+> Chunks:模块编号
+
+> Chunk Names:模块名
+
+### 加参数进行打包
+
+**以css-loader和style-loader为例子**
+
+在命令行中打包
+
+```
+webpack hello.js hello.bundle.js --module-bind 'css=style-loader!css-loader' --watch --progress
+```
+
+在模块中引用
+
+```
+require('./style.css')
+```
+
+> `--module-bind`:模块绑定，就是所有.css文件都需要经过css-loader编译style-loader插入
+
+> `watch`:监听.css文件的变化并重新打包
+
+> `--progress`:显示打包进度
+
+由以上可知在命令行中加参数进行打包比较繁琐,所以一般使用加载配置文件的形式进行打包
 
 ## 加载配置文件
 
@@ -37,7 +132,7 @@ webpack --config webpack.config.dev.js
 
 运行`npm run build`加载发布模式的配置文件
 
-## webpack.config.js参数详解
+## webpack.config.js配置文件参数详解
 
 ### 1.单文件入口
 
@@ -637,3 +732,141 @@ npm install url-loader file-loader --save-dev
 > `limit: 8192`:当文件体积小于limit时, url-loader把文件转为Data URI的格式(就是base64)内联到引用的地方；当文件大于limit时, url-loader会调用file-loader, 把文件储存到输出目录, 并把引用的文件路径改写成输出后的路径
 
 > `name: 'images/[name].[ext]'`:打包后的图片输出到images目录下,并保留原始文件名和扩展名
+
+### 12.uglifyjs-webpack-plugin(发布板中使用)
+
+目的
+
+```
+压缩js文件
+```
+
+安装
+
+```shell
+npm install uglifyjs-webpack-plugin --save-dev
+```
+
+使用
+
+```javascript
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+plugins: [
+    new UglifyJSPlugin({
+        mangle: {
+            // 跳过这些
+            except: ['$super', '$', 'exports', 'require']
+        }
+    }) //压缩js
+]
+```
+
+### 13.extract-text-webpack-plugin(发布板中使用)
+
+目的
+
+```
+将style标签中的样式抽取合并到一个css文件中
+```
+
+文档:
+
+- [v2.2](http://www.css88.com/doc/webpack2/plugins/extract-text-webpack-plugin/)
+
+安装:
+
+```shell
+npm install --save-dev extract-text-webpack-plugin
+```
+
+使用:
+
+```javascript
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+module: {
+    rules: [{
+        {
+            test: /\.css$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: [{
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function(loader) {
+                                return [
+                                    require('autoprefixer')() // autoprefixer插件
+                                ]
+                            }
+                        }
+                    }
+                ]
+            })
+        },
+        {
+            test: /\.less$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: [{
+                        loader: "css-loader",
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function(loader) {
+                                return [
+                                    require('autoprefixer')() // autoprefixer插件
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        loader: "less-loader",
+                        options: {
+                            strictMath: true,
+                            noIeCompat: true
+                        }
+                    }
+                ]
+            })
+        },
+        {
+            test: /\.scss$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: [{
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function(loader) {
+                                return [
+                                    require('autoprefixer')() // autoprefixer插件
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        loader: "sass-loader"
+                    }
+                ]
+            })
+        }
+    ],
+},
+plugins: [
+    new ExtractTextPlugin('style.css')
+]
+```

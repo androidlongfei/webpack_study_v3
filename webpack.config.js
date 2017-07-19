@@ -1,16 +1,26 @@
+var webpack = require('webpack')
 var htmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path')
+var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var config = require('./config')
 module.exports = {
-    entry: __dirname + '/src/app.js',
+    entry: './src/app.js',
     output: {
-        path: __dirname + '/dist', // 目标文件路径
-        filename: 'js/[name]-[chunkhash].js'
+        publicPath: config.dev.assetsPublicPath,
+        path: config.dev.assetsRoot, // 目标文件路径
+        filename: '[name].js'
+    },
+    devtool: 'source-map',
+    devServer: { //webpack-dev-server配置
+        historyApiFallback: true, //不跳转
+        noInfo: true,
+        inline: true, //实时刷新浏览器
+        hot: true // 热替换
     },
     module: {
         rules: [{
                 test: /\.js$/,
                 exclude: /(node_modules|bower_components)/,
-                include: path.resolve(__dirname, 'src'),
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -103,18 +113,27 @@ module.exports = {
                         minimize: true
                     }
                 }],
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
+                use: [{
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        name: path.posix.join(config.dev.assetsSubDirectory, 'images/[name].[ext]')
+                    }
+                }]
             }
         ],
     },
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': 'dev'
+        }), //定义编译前的环境变量
+        new webpack.HotModuleReplacementPlugin(), //热替换插件
         new htmlWebpackPlugin({
             template: 'index.html', //指定模版.就是将打包的js文件插入到该模版中
-            inject: 'body', //将js插入到头部,
-            minify: {
-                removeComments: true, //删除注释
-                removeTagWhitespace: true, //移出空格
-                collapseWhitespace: true //移出空格
-            } //压缩html
+            inject: 'body' //将js插入到头部,
         }) //将打包的js文件导入到html
     ]
 }
