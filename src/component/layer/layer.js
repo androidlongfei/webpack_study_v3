@@ -1,11 +1,12 @@
-// import layer from './layer.html'
+import layerHtml from './layer.html'
 import layerLess from './layer.less'
 import testScss from './test.scss'
 
 function layer() {
     return {
         name: 'layer',
-        tpl: layerLess
+        layerLess: layerLess,
+        tpl: layerHtml
     }
 }
 

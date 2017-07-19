@@ -567,3 +567,73 @@ module.exports = {
 > `less执行顺序`: less-loader -> postcss-loader -> css-loader -> style-loader
 
 > `sass执行顺序`: sass-loader -> postcss-loader -> css-loader -> style-loader
+
+### 10.html-loader
+
+目的:
+
+```
+将html文件内容转化为字符串，再模块化
+```
+
+文档:
+
+- [npm:html-loader](https://www.npmjs.com/package/html-loader)
+
+安装:
+
+```shell
+npm install html-loader --save-dev
+```
+
+使用:
+
+```javascript
+{
+    test: /\.html$/,
+    use: [{
+        loader: 'html-loader',
+        options: {
+            minimize: true
+        }
+    }],
+}
+```
+
+### 11.url-loader和file-loader
+
+目的:
+
+```
+将图片和字体文件模块化
+```
+
+文档:
+
+- [npm:url-loader](https://www.npmjs.com/package/url-loader)
+- [npm:file-loader](https://www.npmjs.com/package/file-loader)
+
+安装:
+
+```shell
+npm install url-loader file-loader --save-dev
+```
+
+使用:
+
+```javascript
+{
+    test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
+    use: [{
+        loader: 'url-loader',
+        options: {
+            limit: 8192,
+            name: 'images/[name].[ext]'
+        }
+    }]
+}
+```
+
+> `limit: 8192`:当文件体积小于limit时, url-loader把文件转为Data URI的格式(就是base64)内联到引用的地方；当文件大于limit时, url-loader会调用file-loader, 把文件储存到输出目录, 并把引用的文件路径改写成输出后的路径
+
+> `name: 'images/[name].[ext]'`:打包后的图片输出到images目录下,并保留原始文件名和扩展名
