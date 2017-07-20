@@ -44,7 +44,7 @@ module.exports = {
                     loader: 'url-loader',
                     options: {
                         limit: 8192,
-                        name: path.posix.join(config.dev.assetsSubDirectory, 'images/[name].[ext]')
+                        name: path.posix.join('dist', 'images/[name].[ext]')
                     }
                 }]
             }

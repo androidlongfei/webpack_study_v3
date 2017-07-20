@@ -38,8 +38,9 @@
 		"webpack-merge": "^4.1.0"
 	},
 	"scripts": {
-		"dev": "node build/dev-server.js",
-		"build": "node build/build.js"
+		"test": "webpack --config webpack.config.js --progress --display-modules --colors --display-reasons",
+		"build": "webpack --config webpack.config.prod.js",
+		"dev": "webpack-dev-server --hot --open"
 	},
 	"author": "",
 	"license": "ISC"

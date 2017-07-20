@@ -116,8 +116,9 @@ webpack --config webpack.config.dev.js
 
 ```javascript
 "scripts": {
-  "dev": "webpack --config webpack.config.dev.js --progress --display-modules --colors --display-reasons",
-  "build": "webpack --config webpack.config.js"
+  "test": "webpack --config webpack.config.js --progress --display-modules --colors --display-reasons",
+  "build": "webpack --config webpack.config.prod.js",
+  "dev": "webpack-dev-server --hot --open"
 },
 ```
 
@@ -127,7 +128,13 @@ webpack --config webpack.config.dev.js
 
 > `--display-reasons`:显示加载模块的原因
 
-运行`npm run dev`加载开发模式的配置文件
+> `--hot`:热更新
+
+> `--open`:在浏览器中打开
+
+运行`npm run dev`加载开发模式的配置文件,并启动测试服务器,然后可以在浏览器上访问.
+
+运行`npm run test`加载开发模式的配置文件,并启动测试服务器。
 
 运行`npm run build`加载发布模式的配置文件
 
