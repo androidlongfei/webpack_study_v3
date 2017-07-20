@@ -7,13 +7,13 @@ npm install
 测试
 
 ```shell
-npm run dev
+npm run test
 ```
 
 在浏览器中测试
 
 ```shell
-npm run test
+npm run dev
 ```
 
 发布
